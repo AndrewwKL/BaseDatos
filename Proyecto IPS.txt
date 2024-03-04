@@ -1,0 +1,231 @@
+Proyecto IPS
+
+--------------------------------------
+CREAR TABLAS
+1.paciente
+
+CREATE TABLE paciente(
+    id_paciente INT AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    cedula VARCHAR(15) NOT NULL,
+    genero CHAR(1) NOT NULL,
+    direccion VARCHAR (30) NOT NULL,
+    rh VARCHAR(2) NOT NULL,
+    correo VARCHAR(50),
+    telefono VARCHAR (15),
+    PRIMARY KEY (id_paciente)
+    
+);
+2.eps
+
+CREATE TABLE eps(
+    id_eps INT AUTO_INCREMENT,
+    nombre_eps VARCHAR(45) NOT NULL,
+    afiliacion_paciente VARCHAR(45) NOT NULL,
+    direccion VARCHAR (30) NOT NULL,
+    correo VARCHAR(50) NOT NULL,
+    telefono VARCHAR (15) NOT NULL,
+    PRIMARY KEY (id_eps)
+    
+);
+3.sede
+
+CREATE TABLE sede(
+    id_sede INT AUTO_INCREMENT,
+    nombre VARCHAR(45) NOT NULL,
+    direccion VARCHAR (45) NOT NULL,
+    correo VARCHAR(45) NOT NULL,
+    telefono VARCHAR (15) NOT NULL,
+    PRIMARY KEY (id_sede)
+    
+);
+
+4.medico
+
+CREATE TABLE medico(
+    id_medico INT AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id_medico)
+    
+);
+
+5.autorizacion
+
+CREATE TABLE autorizacion(
+    id_autorizacion INT AUTO_INCREMENT,
+    fecha_autorizacion DATE,
+    servicio VARCHAR(30),
+    id_paciente INT,
+    id_eps INT,
+    PRIMARY KEY (id_autorizacion),
+    FOREIGN KEY(id_paciente)REFERENCES paciente (id_paciente),
+    FOREIGN KEY(id_eps)REFERENCES eps (id_eps)
+    
+);
+
+6.historia_clinica
+
+
+CREATE TABLE historia_clinica(
+    id_historia_clinica INT AUTO_INCREMENT,
+    fecha_creacion DATE NOT NULL,
+    observacion TEXT NOT NULL,
+    diagnostico_medico TEXT NOT NULL,
+    antecedentes_medicos TEXT NOT NULL,
+    PRIMARY KEY (id_historia_clinica)
+);
+
+----------------------------------------------------
+FORANEAS
+
+1.sede_eps
+
+CREATE TABLE sede_eps(
+    id_sede INT,
+    id_eps INT,
+    FOREIGN KEY(id_sede) REFERENCES sede (id_sede),
+    FOREIGN KEY(id_eps) REFERENCES eps (id_eps)
+);
+
+2.historia_clinica_medico
+
+CREATE TABLE historia_clinica_medico(
+    id_historia_clinica INT,
+    id_medico INT,
+    FOREIGN KEY(id_historia_clinica) REFERENCES historia_clinica (id_historia_clinica),
+    FOREIGN KEY(id_medico) REFERENCES medico (id_medico)
+);
+
+3.medico_sede
+
+CREATE TABLE medico_sede(
+    id_medico INT,
+    id_sede INT,
+    FOREIGN KEY (id_medico) REFERENCES medico (id_medico),
+    FOREIGN KEY (id_sede) REFERENCES sede (id_sede)
+);
+
+-------------------------------------------------------------
+INSERTAR DATOS PACIENTE
+
+INSERT INTO paciente (nombre, fecha_nacimiento, cedula, genero, direccion, rh, correo, telefono)
+VALUES 
+    ('Juan Pérez', '1990-05-15', '123456789', 'M', 'Calle 123, Ciudad', 'O+', 'juan.perez@email.com', '555-1234'),
+    ('Ana Gómez', '1985-08-22', '987654321', 'F', 'Avenida 456, Pueblo', 'A-', 'ana.gomez@email.com', '555-5678'),
+    ('Carlos Rodríguez', '1998-02-10', '234567890', 'M', 'Plaza 789, Villa', 'B+', 'carlos.rodriguez@email.com', '555-9012'),
+    ('María López', '1980-11-30', '345678901', 'F', 'Calle 567, Pueblo', 'AB-', NULL, '555-3456'),
+    ('Pedro Ramírez', '1995-07-18', '456789012', 'M', 'Avenida 890, Ciudad', 'O-', 'pedro.ramirez@email.com', NULL);
+
+INSERTAR DATOS EPS
+
+INSERT INTO eps (nombre_eps, afiliacion_paciente, direccion, correo, telefono)
+VALUES 
+    ('EPS SaludTotal', 'ST123456', 'Carrera 123, Ciudad', 'info@saludtotal.com', '555-1111'),
+    ('EPS Coomeva', 'CV789012', 'Avenida 456, Pueblo', 'info@coomeva.com', '555-2222'),
+    ('EPS Sura', 'SR345678', 'Plaza 789, Villa', 'info@sura.com', '555-3333'),
+    ('EPS Sanitas', 'SN456789', 'Calle 567, Pueblo', 'info@sanitas.com', '555-4444'),
+    ('EPS Cruz Blanca', 'CB567890', 'Avenida 890, Ciudad', 'info@cruzblanca.com', '555-5555');
+
+INSERTAR DATOS SEDE
+
+INSERT INTO sede (nombre, direccion, correo, telefono)
+VALUES 
+    ('Sede Principal', 'Calle Principal 123, Ciudad', 'info@sedeprincipal.com', '555-1111'),
+    ('Sede Norte', 'Avenida Norte 456, Pueblo', 'info@sedenorte.com', '555-2222'),
+    ('Sede Sur', 'Plaza Sur 789, Villa', 'info@sedesur.com', '555-3333'),
+    ('Sede Este', 'Carrera Este 567, Pueblo', 'info@sedeeste.com', '555-4444'),
+    ('Sede Oeste', 'Calle Oeste 890, Ciudad', 'info@sedeoeste.com', '555-5555');
+
+INSERTAR DATOS MEDICO
+
+INSERT INTO medico (nombre, especialidad)
+VALUES
+  ('Juan Pérez', 'Cardiología'),
+  ('Ana Gómez', 'Pediatría'),
+  ('Laura Rodríguez', 'Oncología'),
+  ('Carlos Martínez', 'Ginecología'),
+  ('María López', 'Neurología');
+
+INSERTAR DATOS AUTORIZACION
+
+INSERT INTO autorizacion (fecha_autorizacion, servicio, id_paciente, id_eps)
+VALUES 
+    ('2024-03-01', 'Consulta Médica', 1, 1),
+    ('2024-03-02', 'Análisis de Sangre', 2, 2),
+    ('2024-03-03', 'Radiografía', 3, 3),
+    ('2024-03-04', 'Cirugía Menor', 4, 4),
+    ('2024-03-05', 'Tratamiento Fisioterapéutico', 5, 5);
+
+INSERTAR DATOS HISTORIA CLINICA
+
+INSERT INTO historia_clinica (fecha_creacion, observacion, diagnostico_medico, antecedentes_medicos)VALUES  ('2024-02-15', 'Paciente presenta fiebre y dolor de garganta.', 'Amigdalitis aguda', 'Ninguno'),   ('2024-01-20', 'Paciente se queja de dolores abdominales.', 'Gastritis', 'Intolerancia a la lactosa'),   ('2024-03-05', 'Paciente con mareos y pérdida de equilibrio.', 'Vértigo benigno', 'Hipertensión arterial'),   ('2024-02-10', 'Paciente embarazada en su tercer trimestre.', 'Embarazo normal', 'Diabetes gestacional'),   ('2024-01-05', 'Paciente con dolor de cabeza persistente.', 'Migraña crónica', 'Antecedentes familiares de migraña');
+
+-------------------------------------------------------------------------------------
+MODIFICAR DATOS
+
+Modificar el tipo de dato de la columna rh en la tabla paciente
+ALTER TABLE paciente
+MODIFY COLUMN rh VARCHAR(3);
+
+Modificar la información de un paciente en la tabla paciente
+UPDATE paciente
+SET nombre = 'Nuevo Nombre', 
+    fecha_nacimiento = '1990-01-01', 
+    cedula = '1234567890', 
+    genero = 'F', 
+    direccion = 'Nueva Dirección', 
+    rh = 'A+', 
+    correo = 'nuevo@email.com', 
+    telefono = '555-1234'
+WHERE id_paciente = 4;
+
+Modificar el tipo de dato de la columna rh en la tabla paciente
+UPDATE paciente
+SET rh = 'AB-'
+WHERE id_paciente = 4;
+------------------------------------------------
+VINCULAR TABLA INTERMEDIARÍA
+
+1. sede_eps
+INSERT INTO sede_eps (id_sede, id_eps)
+VALUES 
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4),
+    (5, 5);
+
+2. historia_clinica_medico
+INSERT INTO historia_clinica_medico (id_historia_clinica, id_medico)
+VALUES 
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4),
+    (5, 5);
+
+3. medico_sede
+INSERT INTO medico_sede (id_medico, id_sede)
+VALUES 
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4),
+    (5, 5);
+
+SELECT * FROM eps;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
